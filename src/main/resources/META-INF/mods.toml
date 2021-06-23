@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+
+[[mods]]
+modId="throwable"
+version="1.0.0"
+displayName="Throwable Everything"
+logoFile="throwable.png"
+credits="Thanks to my shower thoughts"
+authors="NorthWestWind"
+description='''
+Yeet yo items
+'''
+
+[[dependencies.throwable]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.throwable]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
