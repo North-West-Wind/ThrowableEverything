@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[37,)"
 license="All rights reserved"
 
 [[mods]]
 modId="throwable"
-version="1.0.0"
+version="2.0.0"
 displayName="Throwable Everything"
 updateJSONURL="https://raw.githubusercontent.com/North-West-Wind/ThrowableEverything/main/update.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/throwable-everything"
@@ -18,13 +18,13 @@ Yeet yo items
 [[dependencies.throwable]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[37,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.throwable]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.17.1,1.18)"
     ordering="NONE"
     side="BOTH"

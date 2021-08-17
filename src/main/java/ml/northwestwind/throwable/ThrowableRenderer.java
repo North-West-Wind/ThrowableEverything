@@ -1,16 +1,18 @@
 package ml.northwestwind.throwable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -18,10 +20,10 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class ThrowableRenderer extends EntityRenderer<ThrowableItemEntity> {
-    private final net.minecraft.client.renderer.ItemRenderer itemRenderer;
+    private final ItemRenderer itemRenderer;
     private final Random random = new Random();
 
-    public ThrowableRenderer(EntityRendererManager p_i46167_1_, net.minecraft.client.renderer.ItemRenderer p_i46167_2_) {
+    public ThrowableRenderer(EntityRendererProvider.Context p_i46167_1_, ItemRenderer p_i46167_2_) {
         super(p_i46167_1_);
         this.itemRenderer = p_i46167_2_;
         this.shadowRadius = 0.15F;
@@ -43,16 +45,19 @@ public class ThrowableRenderer extends EntityRenderer<ThrowableItemEntity> {
         return i;
     }
 
-    public void render(ThrowableItemEntity entity, float p_225623_2_, float p_225623_3_, MatrixStack matrix, IRenderTypeBuffer buffer, int p_225623_6_) {
+    @Override
+    public void render(ThrowableItemEntity entity, float p_225623_2_, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int p_225623_6_) {
         matrix.pushPose();
         ItemStack itemstack = entity.getItem();
         int i = itemstack.isEmpty() ? 187 : Item.getId(itemstack.getItem()) + itemstack.getDamageValue();
         this.random.setSeed(i);
-        IBakedModel ibakedmodel = this.itemRenderer.getModel(itemstack, entity.level, null);
+        BakedModel ibakedmodel = this.itemRenderer.getModel(itemstack, entity.level, null, entity.getId());
         boolean flag = ibakedmodel.isGui3d();
         int j = this.getRenderAmount(itemstack);
-        float f2 = shouldBob() ? ibakedmodel.getTransforms().getTransform(ItemCameraTransforms.TransformType.GROUND).scale.y() : 0;
+        float f2 = shouldBob() ? ibakedmodel.getTransforms().getTransform(ItemTransforms.TransformType.GROUND).scale.y() : 0;
         matrix.translate(0.0D, 0.25F * f2, 0.0D);
+        float f3 = entity.getSpin(partialTicks);
+        matrix.mulPose(Vector3f.YP.rotation(f3));
         if (!flag) {
             float f7 = -0.0F * (float)(j - 1) * 0.5F;
             float f8 = -0.0F * (float)(j - 1) * 0.5F;
@@ -75,7 +80,7 @@ public class ThrowableRenderer extends EntityRenderer<ThrowableItemEntity> {
                 }
             }
 
-            this.itemRenderer.render(itemstack, ItemCameraTransforms.TransformType.GROUND, false, matrix, buffer, p_225623_6_, OverlayTexture.NO_OVERLAY, ibakedmodel);
+            this.itemRenderer.render(itemstack, ItemTransforms.TransformType.GROUND, false, matrix, buffer, p_225623_6_, OverlayTexture.NO_OVERLAY, ibakedmodel);
             matrix.popPose();
             if (!flag) {
                 matrix.translate(0.0, 0.0, 0.09375F);
@@ -83,11 +88,11 @@ public class ThrowableRenderer extends EntityRenderer<ThrowableItemEntity> {
         }
 
         matrix.popPose();
-        super.render(entity, p_225623_2_, p_225623_3_, matrix, buffer, p_225623_6_);
+        super.render(entity, p_225623_2_, partialTicks, matrix, buffer, p_225623_6_);
     }
 
     public ResourceLocation getTextureLocation(ThrowableItemEntity p_110775_1_) {
-        return AtlasTexture.LOCATION_BLOCKS;
+        return TextureAtlas.LOCATION_BLOCKS;
     }
 
     public boolean shouldSpreadItems() {

@@ -1,5 +1,8 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/throwable-everything",
+  "1.17.1": {
+    "2.0.0": "1.17.1 release"
+  },
   "1.16.5": {
     "1.0.0": "Initial release"
   },
@@ -16,6 +19,8 @@
     "1.0.0": "Initial release"
   },
   "promos": {
+    "1.17.1-latest": "2.0.0",
+    "1.17.1-recommended": "2.0.0",
     "1.16.5-latest": "1.0.0",
     "1.16.5-recommended": "1.0.0",
     "1.16.4-latest": "1.0.0",
